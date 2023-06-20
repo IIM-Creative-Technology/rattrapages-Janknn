@@ -15,6 +15,17 @@ function getWeatherData() {
     });
 }
 
+const weatherInfoElement = document.getElementById('weather-info');
+
+function displayWeatherInfo(weatherData) {
+  const temperature = weatherData.main.temp;
+  const weatherDescription = weatherData.weather[0].description;
+  
+  const weatherString = `Température : ${temperature}°C<br>Description : ${weatherDescription}`;
+
+  weatherInfoElement.innerHTML = weatherString;
+}
+
 getWeatherData()
   .then(weatherData => {
     displayWeatherInfo(weatherData);
