@@ -32,12 +32,27 @@ function getForecastWeatherData() {
 
 const weatherInfoElement = document.getElementById('weather-info');
 
+function getAffluence(description) {
+  if (description.includes('pluie')) {
+    return 'très faible affluence';
+  } else if (description.includes('couvert')) {
+    return 'faible affluence';
+  } else if (description.includes('nuageux')) {
+    return 'moyen affluence';
+  } else if (description.includes('ciel dégagé')) {
+    return 'forte affluence';
+  } else {
+    return '';
+  }
+}
+
 function displayWeatherInfo(currentWeatherData, forecastWeatherData) {
   let forecastString = '';
 
   const currentTemperature = currentWeatherData.main.temp;
   const currentWeatherDescription = currentWeatherData.weather[0].description;
-  forecastString += `Temps actuel - Température : ${currentTemperature}°C, Description : ${currentWeatherDescription}<br><br>`;
+  const currentAffluence = getAffluence(currentWeatherDescription);
+  forecastString += `Temps actuel - Température : ${currentTemperature}°C, Description : ${currentWeatherDescription}, Affluence : ${currentAffluence}<br><br>`;
 
   let forecastCount = 0;
   for (let i = 0; i < forecastWeatherData.list.length; i++) {
@@ -53,10 +68,11 @@ function displayWeatherInfo(currentWeatherData, forecastWeatherData) {
 
       const forecastTemperature = forecastDayWeather.main.temp;
       const forecastWeatherDescription = forecastDayWeather.weather[0].description;
+      const forecastAffluence = getAffluence(forecastWeatherDescription);
       const forecastDateString = forecastDateTime.toLocaleDateString('fr-FR', { weekday: 'long' });
       const forecastTimeString = forecastDateTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
 
-      forecastString += `${forecastDateString} à ${forecastTimeString} - Température : ${forecastTemperature}°C, Description : ${forecastWeatherDescription}<br>`;
+      forecastString += `${forecastDateString} à ${forecastTimeString} - Température : ${forecastTemperature}°C, Description : ${forecastWeatherDescription}, Affluence : ${forecastAffluence}<br>`;
     }
   }
 
