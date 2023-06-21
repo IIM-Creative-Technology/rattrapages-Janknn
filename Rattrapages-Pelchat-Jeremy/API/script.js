@@ -32,18 +32,32 @@ function getForecastWeatherData() {
 
 const weatherInfoElement = document.getElementById('weather-info');
 
-function getAffluence(description) {
+function getAffluence(description,temp) {
+  let affluence = '';
+
   if (description.includes('pluie')) {
-    return 'très faible affluence';
+    if (temp < 5) {
+      affluence = 'très faible affluence';
+    } else {
+      affluence = 'faible affluence';
+    }
   } else if (description.includes('couvert')) {
-    return 'faible affluence';
+    if (temp < 10) {
+      affluence = 'faible affluence';
+    } else {
+      affluence = 'moyenne affluence';
+    }
   } else if (description.includes('nuageux')) {
-    return 'moyen affluence';
+    if (temp < 20) {
+      affluence = 'moyenne affluence';
+    } else {
+      affluence = 'forte affluence';
+    }
   } else if (description.includes('ciel dégagé')) {
-    return 'forte affluence';
-  } else {
-    return '';
+    affluence = 'forte affluence';
   }
+
+  return affluence;
 }
 
 function displayWeatherInfo(currentWeatherData, forecastWeatherData) {
