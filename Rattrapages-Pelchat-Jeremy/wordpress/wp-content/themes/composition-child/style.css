@@ -1,0 +1,12 @@
+/*
+Theme Name: composition-child
+Description: rattrapage wordpress
+Author: Jeremy Pelchat
+Author URI : wordpress.test
+Text Domain: composition-child
+Template : composition
+*/
+
+body {
+    background-color: white;
+}
