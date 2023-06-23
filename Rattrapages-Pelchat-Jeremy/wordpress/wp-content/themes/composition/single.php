@@ -7,34 +7,30 @@
  * @package Composition
  */
 
-get_header();
-?>
+get_header(); ?>
 
-	<main id="primary" class="site-main">
-
-		<?php
-		while ( have_posts() ) :
-			the_post();
-
-			get_template_part( 'template-parts/content', get_post_type() );
-
-			the_post_navigation(
-				array(
-					'prev_text' => '<span class="nav-subtitle">' . esc_html__( 'Previous:', 'composition' ) . '</span> <span class="nav-title">%title</span>',
-					'next_text' => '<span class="nav-subtitle">' . esc_html__( 'Next:', 'composition' ) . '</span> <span class="nav-title">%title</span>',
-				)
-			);
-
-			// If comments are open or we have at least one comment, load up the comment template.
-			if ( comments_open() || get_comments_number() ) :
-				comments_template();
-			endif;
-
-		endwhile; // End of the loop.
-		?>
-
-	</main><!-- #main -->
-
-<?php
-get_sidebar();
-get_footer();
+<div id="primary" class="content-area">
+	<main id="main" class="site-main" role="main">
+ 
+		<?php while (have_posts()) : the_post(); ?>
+ 
+			<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+				<header class="entry-header">
+					<h1 class="entry-title"><?php the_title(); ?></h1>
+				</header>
+ 
+				<div class="entry-content">
+					<?php the_content(); ?>
+ 
+					<p>Couleur : <?php echo get_field('couleur'); ?></p>
+					<p>Prix : <?php echo get_field('prix'); ?></p>
+				</div>
+			</article>
+ 
+		<?php endwhile; ?>
+ 
+	</main>
+</div>
+ 
+<?php get_footer(); ?>
+ 
