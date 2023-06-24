@@ -24,4 +24,10 @@ class Connexion
             'state' => $command->state
         ]);
     }
+
+    public function getCommand(){
+        $query = 'SELECT * FROM commandes';
+        $request = $this->pdo->query($query);
+        return $request->fetchAll(); 
+    }
 }
