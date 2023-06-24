@@ -8,6 +8,8 @@ class Command {
         public int $price,
         public string $state
     ) {
-        
     } 
+    public function randomPrice() {
+        $this->price = rand(10,100);
+    }
 }

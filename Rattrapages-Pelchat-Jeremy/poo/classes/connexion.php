@@ -1,6 +1,6 @@
 <?php
 
-class Connection
+class Connexion
 {
 
     private PDO $pdo;
@@ -12,6 +12,8 @@ class Connection
 
     public function command(Command $command) 
     {
+        $command->randomPrice();
+        $command->state = "Commande prise en compte";
         $query = 'INSERT INTO commandes (first_name, last_name, address, price, state) VALUES (:first_name, :last_name, :address, :price, :state)';
         $statement = $this->pdo->prepare($query);
         return $statement->execute([
