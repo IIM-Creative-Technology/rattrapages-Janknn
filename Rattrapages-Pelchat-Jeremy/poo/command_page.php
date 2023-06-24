@@ -11,6 +11,19 @@
     require_once 'classes/connexion.php';
     $connexion = new Connexion();
     $commands = $connexion->getCommand();
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $commandId = $_POST['command_id'];
+        $newState = $_POST['new_state'];
+
+        $updated = $connexion->updateCommandState($commandId, $newState);
+
+        if ($updated) {
+            echo "Statut de la commande mis à jour avec succès.";
+        } else {
+            echo "Erreur lors de la mise à jour du statut de la commande.";
+        }
+    }
 ?>
 
 <body>
@@ -20,6 +33,17 @@
         <h1><?php echo $command['address'];?></h1>
         <h1><?php echo $command['price'];?></h1>
         <h1><?php echo $command['state'];?></h1>
+
+        <form method="post" action="">
+            <input type="hidden" name="command_id" value="<?php echo $command['id']; ?>">
+            <select name="new_state">
+                <option value="En cours">En cours</option>
+                <option value="Réalisée">Réalisée</option>
+                <option value="Annulée">Annulée</option>
+            </select>
+            <button type="submit">Mettre à jour le statut</button>
+        </form>
+
     <?php endforeach; ?>
 </body>
 </html>

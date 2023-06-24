@@ -30,4 +30,13 @@ class Connexion
         $request = $this->pdo->query($query);
         return $request->fetchAll(); 
     }
+
+    public function updateCommandState($commandId, $newState) {
+        $query = 'UPDATE commandes SET state = :new_state WHERE id = :command_id';
+        $statement = $this->pdo->prepare($query);
+        return $statement->execute([
+            'new_state' => $newState,
+            'command_id' => $commandId
+        ]);
+    }
 }
