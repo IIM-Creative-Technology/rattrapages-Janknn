@@ -31,6 +31,10 @@ function getForecastWeatherData() {
 }
 
 const weatherInfoElement = document.getElementById('weather-info');
+const weatherDateElement = document.getElementById('weather-date');
+const weatherTempElement = document.getElementById('weather-temp');
+const weatherDescriptionElement = document.getElementById('weather-description');
+const weatherAffluenceElement = document.getElementById('weather-affluence');
 
 function getAffluence(description,temp) {
   let affluence = '';
@@ -61,12 +65,15 @@ function getAffluence(description,temp) {
 }
 
 function displayWeatherInfo(currentWeatherData, forecastWeatherData) {
-  let forecastString = '';
+  const forecastElement = document.getElementById('forecast');
+  forecastElement.innerHTML = '';
 
   const currentTemperature = currentWeatherData.main.temp;
   const currentWeatherDescription = currentWeatherData.weather[0].description;
-  const currentAffluence = getAffluence(currentWeatherDescription);
-  forecastString += `Temps actuel - Température : ${currentTemperature}°C, Description : ${currentWeatherDescription}, Affluence : ${currentAffluence}<br><br>`;
+  const currentAffluence = getAffluence(currentWeatherDescription, currentTemperature);
+
+  const currentForecastElement = createForecastElement(new Date(), currentTemperature, currentWeatherDescription, currentAffluence);
+  forecastElement.appendChild(currentForecastElement);
 
   let forecastCount = 0;
   for (let i = 0; i < forecastWeatherData.list.length; i++) {
@@ -82,15 +89,41 @@ function displayWeatherInfo(currentWeatherData, forecastWeatherData) {
 
       const forecastTemperature = forecastDayWeather.main.temp;
       const forecastWeatherDescription = forecastDayWeather.weather[0].description;
-      const forecastAffluence = getAffluence(forecastWeatherDescription);
-      const forecastDateString = forecastDateTime.toLocaleDateString('fr-FR', { weekday: 'long' });
-      const forecastTimeString = forecastDateTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+      const forecastAffluence = getAffluence(forecastWeatherDescription, forecastTemperature);
 
-      forecastString += `${forecastDateString} à ${forecastTimeString} - Température : ${forecastTemperature}°C, Description : ${forecastWeatherDescription}, Affluence : ${forecastAffluence}<br>`;
+      const forecastForecastElement = createForecastElement(forecastDateTime, forecastTemperature, forecastWeatherDescription, forecastAffluence);
+      forecastElement.appendChild(forecastForecastElement);
     }
   }
+}
 
-  weatherInfoElement.innerHTML = forecastString;
+function createForecastElement(date, temperature, description, affluence) {
+  const forecastElement = document.createElement('div');
+  forecastElement.classList.add('forecast');
+  forecastElement.classList.add('flex','flex-col','items-center','border-2','w-80','rounded-xl','justify-center','h-40','mb-16')
+
+  const dateElement = document.createElement('div');
+  dateElement.classList.add('weather-date');
+  dateElement.textContent = date.toLocaleDateString('fr-FR', { weekday: 'long', hour: '2-digit', minute: '2-digit' });
+
+  const temperatureElement = document.createElement('div');
+  temperatureElement.classList.add('weather-temp');
+  temperatureElement.textContent = `Température : ${temperature}°C`;
+
+  const descriptionElement = document.createElement('div');
+  descriptionElement.classList.add('weather-description');
+  descriptionElement.textContent = `Description : ${description}`;
+
+  const affluenceElement = document.createElement('div');
+  affluenceElement.classList.add('weather-affluence');
+  affluenceElement.textContent = `Affluence : ${affluence}`;
+
+  forecastElement.appendChild(dateElement);
+  forecastElement.appendChild(temperatureElement);
+  forecastElement.appendChild(descriptionElement);
+  forecastElement.appendChild(affluenceElement);
+
+  return forecastElement;
 }
 
 Promise.all([getCurrentWeatherData(), getForecastWeatherData()])
